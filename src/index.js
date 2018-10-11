@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'antd';
-import { getOffset } from '../utils';
+import { getOffset } from './util';
 import './index.less';
 
 const { Group } = Button;
@@ -44,11 +44,11 @@ export default class Cropper extends React.Component {
     componentDidUpdate() {
         const { running } = this.props;
         if (running) {
-            document.body.classList.add("bridge-cropper-fullpage");
+            document.body.classList.add("cropper-fullpage");
             document.removeEventListener("keydown", this.onkeydown);
             document.addEventListener("keydown", this.onkeydown);
         } else {
-            document.body.classList.remove("bridge-cropper-fullpage");
+            document.body.classList.remove("cropper-fullpage");
             document.removeEventListener("keydown", this.onkeydown);
         }
     }
@@ -214,6 +214,7 @@ export default class Cropper extends React.Component {
 
     reset = () => {
         this.setState({
+            running: false,
             startX: -999,
             startY: -999,
             endX: undefined,
@@ -282,7 +283,7 @@ export default class Cropper extends React.Component {
                         zIndex: props.zIndex,
                         cursor: selected ? 'default' : undefined,
                     }}
-                    className="bridge-cropper-overlay"
+                    className="cropper-overlay"
                     onMouseUp={this.overlayListeners.mouseUp}
                     onMouseDown={this.overlayListeners.mouseDown}
                     onMouseMove={this.overlayListeners.mouseMove}
@@ -292,7 +293,7 @@ export default class Cropper extends React.Component {
                     <div
                         ref={this.boxRef}
                         style={boxStyle}
-                        className="bridge-cropper-box"
+                        className="cropper-box"
                         onMouseDown={this.boxListeners.mouseDown}
                     >
                         {selected && this.renderResizer()}
@@ -302,25 +303,25 @@ export default class Cropper extends React.Component {
                                     onClick={this.onCancel}
                                     onMouseDown={e => e.stopPropagation()}
                                 >
-                                    {props.language.cancel}
+                                    取消
                                 </Button>
                                 <Button
                                     type="primary"
                                     onClick={this.onOk}
                                     onMouseDown={e => e.stopPropagation()}
                                 >
-                                    {props.language.next_step}
+                                    完成
                                 </Button>
                             </Group>
                         )}
                     </div>
                 </div>
                 {!selected && <div
-                    className="bridge-cropper-guide"
+                    className="cropper-guide"
                     style={{ zIndex: props.zIndex + 2 }}
                 >
-                    {props.language.select_attention_area}
-                    <a className="jumpover" onClick={this.onJumpOver}>{props.language.jump_over}</a>
+                    请选择区域
+                    <a className="jumpover" onClick={this.onJumpOver}>跳过</a>
                 </div>}
             </Fragment>
         );
